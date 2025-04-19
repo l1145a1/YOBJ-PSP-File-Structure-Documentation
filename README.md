@@ -21,7 +21,7 @@ This document provides a reverse-engineered breakdown of the YOBJ binary file fo
 ---
 
 ## 1. Header
-
+Header length: 72 Bytes
 - `4 Bytes`: String `"YOBJ"`  
 - `4 Bytes`: POF0 Offset (see section 6)  
 - `4 Bytes`: Empty  
