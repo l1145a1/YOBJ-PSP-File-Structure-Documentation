@@ -1,6 +1,25 @@
+# YOBJ Hex File Structure
+
 This document provides a reverse-engineered breakdown of the YOBJ binary file format, commonly used in certain games to store 3D models, meshes, bones, textures, and related data. It is meant to assist modders, developers, or enthusiasts in understanding the internal structure of `.yobj` files for analysis, editing, or tool development purposes.
 
-# YOBJ Hex File Structure
+## Table of Contents
+
+- [1. Header](#1-header)
+- [2. Mesh](#2-mesh)
+  - [2.1 Mesh Header](#21-mesh-header)
+  - [2.2 Bones Mesh Header](#22-bones-mesh-header)
+  - [2.3 Vertice Header Offset](#23-vertice-header-offset)
+  - [2.4 Vertices](#24-vertices)
+  - [2.5 Material](#25-material)
+  - [2.6 Faces Header](#26-faces-header)
+  - [2.7 Faces](#27-faces)
+- [3. Bones](#3-bones)
+- [4. Textures](#4-textures)
+- [5. Model Name](#5-model-name)
+- [6. POF0](#6-pof0)
+
+---
+
 ## 1. Header
 
 - `4 Bytes`: String `"YOBJ"`  
