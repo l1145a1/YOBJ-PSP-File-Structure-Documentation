@@ -26,7 +26,8 @@ Header length: 72 Bytes
 - `4 Bytes`: POF0 Offset (see section 6)  
 - `4 Bytes`: Empty  
 - `4 Bytes`: POF0 Offset (same as above)  
-- `8 Bytes`: Empty  
+- `4 Bytes`: Empty
+- `4 Bytes`: Unknown
 - `4 Bytes`: Mesh Count  
 - `4 Bytes`: Bones Count  
 - `4 Bytes`: Textures Count  
