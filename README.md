@@ -71,11 +71,10 @@ Header length depends on Mesh Bones Count:
 
 - `4 Bytes`: Vertice Offset (see section 2.4)
 
-### 2.4 Vertices
+### 2.4 Vertices (CMIIW because some YOBJ files have a shorter vertice length than this)
 
-- `16 Bytes`: Always the same  
-- Then: `67 * Vertice Count` bytes  
-  - (Some information like vertex positions used by YOBJ File Tools is located here.)  
+- Then: `68 * Vertice Count` bytes  
+  - (Some information such as the vertex positions used by YOBJ File Tools is contained here. But I don't understand the contents yet)  
 - Most of the rest is unknown.
 
 ### 2.5 Material
@@ -129,7 +128,9 @@ Nothing special:
 Length: `32 Bytes`  
 
 - `16 Bytes`: Model Name  
-- `16 Bytes`: Unknown
+- `8 Bytes`: Unknown
+- `4 Bytes`: Vertice Count
+- `4 Bytes`: Empty
 
 ---
 
