@@ -119,9 +119,8 @@ for i in range(MeshDataCount):
         Vertex1 = x
         Vertex2 = z
         Vertex3 = y
-  
-### 2.5 Material
 ```
+### 2.5 Material
 Each material is `144 Bytes` long (based on Material Count):
 
 - `22 Bytes`: Unknown  
