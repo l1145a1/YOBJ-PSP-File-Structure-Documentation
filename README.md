@@ -98,15 +98,15 @@ Mesh Data length and structure depend on the **Flag**:
 **UV Coordinates:**
 - If Flag Boolean = True → `Mesh Data Offset + ((flag_decode + 1) * 4)`  
 - If Flag Boolean = False → UV Coordinate at Mesh Data Offset  
-- `4 Bytes`: U Coordinate  
-- `4 Bytes`: V Coordinate  
+- `4 Bytes`: U Coordinate (Float)
+- `4 Bytes`: V Coordinate (Float)
 
 **Vertex Data:**
 - If Flag Boolean = True → `(Mesh Data Offset + Mesh Data Length) - 12`  
 - If Flag Boolean = False → `(Mesh Data Offset + 36)`  
-- `4 Bytes`: Vertex 1  
-- `4 Bytes`: Vertex 2  
-- `4 Bytes`: Vertex 3  
+- `4 Bytes`: Vertex 1 (Float)
+- `4 Bytes`: Vertex 2 (Float)
+- `4 Bytes`: Vertex 3 (Float)
 
 **Vertex ordering alternates:**
 ```python
