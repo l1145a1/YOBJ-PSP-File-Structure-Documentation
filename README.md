@@ -120,6 +120,9 @@ for i in range(MeshDataCount):
         Vertex2 = z
         Vertex3 = y
 ```
+
+---
+
 ### 2.5 Material
 Each material is `144 Bytes` long (based on Material Count):
 
@@ -138,11 +141,23 @@ Each face header: `16 Bytes`
 - `4 Bytes`: Faces Count  
 - `4 Bytes`: Faces Offset
 
+---
+
 ### 2.7 Faces
 
-Each face: `2 Bytes`  
-- Total length = `2 * Faces Count`  
-- (Used for face rendering in Blender.)
+Each face index is stored as **2 bytes**.  
+- The total length of the face data is `2 * FacesCount`.  
+- Faces are encoded as a **triangle strip**, meaning each new index forms a triangle together with the two previous indices.  
+- Conversion to `.obj` format can be done using the following logic:
+
+```python
+for i in range(faces_count - 2):
+    if i % 2 == 0:  # even step
+        v1, v2, v3 = strip[i], strip[i+1], strip[i+2]
+    else:           # odd step (flip winding order)
+        v1, v2, v3 = strip[i], strip[i+2], strip[i+1]
+    faces.append([v1, v2, v3])
+```
 
 ---
 
