@@ -104,22 +104,9 @@ Mesh Data length and structure depend on the **Flag**:
 **Vertex Data:**
 - If Flag Boolean = True → `(Mesh Data Offset + Mesh Data Length) - 12`  
 - If Flag Boolean = False → `(Mesh Data Offset + 36)`  
-- `4 Bytes`: Vertex 1 (Float)
-- `4 Bytes`: Vertex 2 (Float)
-- `4 Bytes`: Vertex 3 (Float)
-
-**Vertex ordering alternates:**
-```python
-for i in range(MeshDataCount):
-    if i % 2 == 0:  # even
-        Vertex1 = x
-        Vertex2 = y
-        Vertex3 = z
-    else:           # odd
-        Vertex1 = x
-        Vertex2 = z
-        Vertex3 = y
-```
+- `4 Bytes`: Vertex X (Float)
+- `4 Bytes`: Vertex Y (Float)
+- `4 Bytes`: Vertex Z (Float)
 
 ---
 
