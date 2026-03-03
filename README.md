@@ -10,7 +10,7 @@ It is intended to assist modders, developers, and enthusiasts in understanding t
 - [1. Header](#1-header)
 - [2. Mesh](#2-mesh)
   - [2.1 Mesh Header](#21-mesh-header)
-  - [2.2 Bones Mesh Header](#22-bones-mesh-header)
+  - [2.2 Bones Mesh Assign Header](#22-bones-mesh-assign-header)
   - [2.3 Mesh Data Header Offset](#23-mesh-data-header-offset)
   - [2.4 Mesh Data](#24-mesh-data)
   - [2.5 Material](#25-material)
@@ -53,7 +53,7 @@ It is intended to assist modders, developers, and enthusiasts in understanding t
 
 - `4 Bytes`: Always 1  
 - `4 Bytes`: Material Count  
-- `4 Bytes`: Bones Mesh Header Offset (see 2.2)  
+- `4 Bytes`: Bones Mesh Assign Header Offset (see 2.2)  
 - `4 Bytes`: Material Offset (see 2.5)  
 - `4 Bytes`: Empty  
 - `4 Bytes`: Always 1  
@@ -65,15 +65,15 @@ It is intended to assist modders, developers, and enthusiasts in understanding t
 
 ---
 
-### 2.2 Bones Mesh Header
+### 2.2 Bones Mesh Assign Header
 
 **Length:** depends on Mesh Bones Count
 
 - `4 Bytes`: Mesh Data Count (same as in mesh header)  
-- `4 Bytes`: Mesh Bones Count  
+- `4 Bytes`: Bones Mesh Assign Count  
 - `4 Bytes`: Mesh Data Header Offset  
 - `4 Bytes`: Empty  
-- **Bones Assignments:** 4 Bytes per bone according to Mesh Bones Count (usually 4–16 bytes), using bone index  
+- **Bones Assignments:** 4 Bytes per bone according to Bones Mesh Assign Count (usually 4–16 bytes), using bone index  
 
 ---
 
@@ -85,28 +85,70 @@ It is intended to assist modders, developers, and enthusiasts in understanding t
 
 ### 2.4 Mesh Data
 
-Mesh Data length and structure depend on the **Flag**:
+The structure of mesh data depends on whether the mesh has bone assignments or not.  
+Each record represents **one vertex** with its complete attributes.
 
-1. Flag is stored in the mesh header as an integer.  
+#### Method 1: Calculate Mesh Data Length by Flag
+Mesh data length can be determined using the flag stored in the mesh header:
+
+1. Read the flag as an integer.  
 2. Convert flag to boolean: `flag & 1536 != 0`  
-3. Convert flag to 32-bit binary string and reverse: `format(flag, '032b')[::-1]`  
+3. Convert flag to a 32‑bit binary string and reverse: `format(flag, '032b')[::-1]`  
 4. Decode bits 16–14 into integer: `int(flag_binary[16:13:-1], 2)`  
 
 - **If Flag Boolean = True** → Mesh Data Length = `(flag_decode + 10) * 4`  
-- **If Flag Boolean = False** → Mesh Data Length = `Mesh Data Count * 36`  
+- **If Flag Boolean = False** → Mesh Data Length = `Mesh Data Count * 36`
 
 **UV Coordinates:**
 - If Flag Boolean = True → `Mesh Data Offset + ((flag_decode + 1) * 4)`  
 - If Flag Boolean = False → UV Coordinate at Mesh Data Offset  
-- `4 Bytes`: U Coordinate (Float)
+- `4 Bytes`: U Coordinate (Float)  
 - `4 Bytes`: V Coordinate (Float)
 
 **Vertex Data:**
-- If Flag Boolean = True → `(Mesh Data Offset + Mesh Data Length) - 12`  
-- If Flag Boolean = False → `(Mesh Data Offset + 36)`  
-- `4 Bytes`: Vertex X (Float)
-- `4 Bytes`: Vertex Y (Float)
+- `(Mesh Data Offset + Mesh Data Length) - 12`  
+- `4 Bytes`: Vertex X (Float)  
+- `4 Bytes`: Vertex Y (Float)  
 - `4 Bytes`: Vertex Z (Float)
+
+#### Method 2: Manual Structure (Based on Bone Assignment Count)
+This method describes the actual layout of each vertex record.
+
+##### Mesh with Bone Assign
+If the mesh has bone assignments, the vertex data begins with weights:
+
+- **Weight per Bone Assign**
+  - `4 Bytes` per bone assign: Weight (Float)
+- **UV Coordinates**
+  - `4 Bytes`: U Coordinate (Float)
+  - `4 Bytes`: V Coordinate (Float)
+- **Vertex Color**
+  - `4 Bytes`: RGBA (1 byte per channel)
+- **Normal Vector**
+  - `4 Bytes`: Normal X (Float)
+  - `4 Bytes`: Normal Y (Float)
+  - `4 Bytes`: Normal Z (Float)
+- **Vertex Position**
+  - `4 Bytes`: Vertex X (Float)
+  - `4 Bytes`: Vertex Y (Float)
+  - `4 Bytes`: Vertex Z (Float)
+
+##### Mesh without Bone Assign
+If the mesh does not have bone assignments, there are no weights at the beginning. The data starts directly with UV:
+
+- **UV Coordinates**
+  - `4 Bytes`: U Coordinate (Float)
+  - `4 Bytes`: V Coordinate (Float)
+- **Vertex Color**
+  - `4 Bytes`: RGBA (1 byte per channel)
+- **Normal Vector**
+  - `4 Bytes`: Normal X (Float)
+  - `4 Bytes`: Normal Y (Float)
+  - `4 Bytes`: Normal Z (Float)
+- **Vertex Position**
+  - `4 Bytes`: Vertex X (Float)
+  - `4 Bytes`: Vertex Y (Float)
+  - `4 Bytes`: Vertex Z (Float)
 
 ---
 
